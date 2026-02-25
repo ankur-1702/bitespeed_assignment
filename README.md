@@ -208,6 +208,4 @@ The identity reconciliation follows this flow:
 ---
 
 Built for the Bitespeed Backend Task
-=======
-# Bitespeed-Backend-Project
->>>>>>> Initial backend project commit
+

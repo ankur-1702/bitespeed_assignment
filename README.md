@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Bitespeed Identity Reconciliation Service
 
 A customer identity linking service built for FluxKart.com to track and consolidate customer contact information across multiple purchases.

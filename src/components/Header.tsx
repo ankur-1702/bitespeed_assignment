@@ -35,7 +35,7 @@ export function Header() {
               <span className="text-2xl">⚡</span>
             </div>
             
-            {/* Theme Toggle Button */}
+            
             <button
               onClick={toggleTheme}
               className="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg p-2.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"

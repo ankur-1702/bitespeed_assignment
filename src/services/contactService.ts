@@ -1,6 +1,6 @@
 import { Contact, IdentifyRequest, IdentifyResponse } from '../types/contact';
 
-// Simulated in-memory database
+
 let contacts: Contact[] = [];
 let nextId = 1;
 
@@ -66,13 +66,13 @@ const getAllLinkedContacts = (primaryId: number): Contact[] => {
     result.push(primary);
   }
   
-  // Find all secondary contacts linked to this primary
+  
   const secondaries = contacts.filter(
     c => c.linkedId === primaryId && c.deletedAt === null
   );
   result.push(...secondaries);
   
-  // Also find contacts that might be linked to secondaries (in case of chain)
+  
   const secondaryIds = secondaries.map(s => s.id);
   const tertiaries = contacts.filter(
     c => c.linkedId && secondaryIds.includes(c.linkedId) && c.deletedAt === null
@@ -113,7 +113,7 @@ const updateContactToSecondary = (contact: Contact, newPrimaryId: number): void 
       updatedAt: new Date(),
     };
     
-    // Also update all contacts that were linked to this contact
+    
     contacts.forEach((c, i) => {
       if (c.linkedId === contact.id) {
         contacts[i] = {
@@ -129,7 +129,7 @@ const updateContactToSecondary = (contact: Contact, newPrimaryId: number): void 
 export const identify = (request: IdentifyRequest): IdentifyResponse => {
   const { email, phoneNumber } = request;
   
-  // Normalize inputs
+  
   const normalizedEmail = email?.trim() || null;
   const normalizedPhone = phoneNumber?.toString().trim() || null;
   
@@ -137,17 +137,17 @@ export const identify = (request: IdentifyRequest): IdentifyResponse => {
     throw new Error("At least one of email or phoneNumber must be provided");
   }
   
-  // Find existing contacts
+  
   const contactsByEmail = normalizedEmail ? findContactsByEmail(normalizedEmail) : [];
   const contactsByPhone = normalizedPhone ? findContactsByPhone(normalizedPhone) : [];
   
-  // Get unique contacts
+  
   const allMatchingContacts = [...contactsByEmail, ...contactsByPhone];
   const uniqueContacts = allMatchingContacts.filter(
     (contact, index, self) => self.findIndex(c => c.id === contact.id) === index
   );
   
-  // If no existing contacts found, create a new primary contact
+  
   if (uniqueContacts.length === 0) {
     const newPrimary = createContact(normalizedEmail, normalizedPhone, null, 'primary');
     return {
@@ -160,13 +160,13 @@ export const identify = (request: IdentifyRequest): IdentifyResponse => {
     };
   }
   
-  // Find all primary contacts involved
+  
   const primaryContacts = uniqueContacts
     .map(c => getPrimaryContact(c))
     .filter((contact, index, self) => self.findIndex(c => c.id === contact.id) === index)
     .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
   
-  // If there are multiple primary contacts, link the newer ones to the oldest
+  
   if (primaryContacts.length > 1) {
     const oldestPrimary = primaryContacts[0];
     for (let i = 1; i < primaryContacts.length; i++) {
@@ -174,38 +174,38 @@ export const identify = (request: IdentifyRequest): IdentifyResponse => {
     }
   }
   
-  // Get the primary contact (oldest one)
+
   const primaryContact = primaryContacts[0];
   
-  // Check if we need to create a new secondary contact
+
   const allLinked = getAllLinkedContacts(primaryContact.id);
   
   const emailExists = !normalizedEmail || allLinked.some(c => c.email === normalizedEmail);
   const phoneExists = !normalizedPhone || allLinked.some(c => c.phoneNumber === normalizedPhone);
   
-  // Check if we have an exact match (both email and phone already exist in the same contact)
+
   const exactMatch = allLinked.some(
     c => c.email === normalizedEmail && c.phoneNumber === normalizedPhone
   );
   
-  // Create secondary contact if new information is provided
+
   if (!exactMatch && normalizedEmail && normalizedPhone && (!emailExists || !phoneExists)) {
     createContact(normalizedEmail, normalizedPhone, primaryContact.id, 'secondary');
   }
   
-  // Get all linked contacts again (in case we just created one)
+
   const finalLinked = getAllLinkedContacts(primaryContact.id);
   
-  // Build response
+
   const emails = new Set<string>();
   const phoneNumbers = new Set<string>();
   const secondaryIds: number[] = [];
   
-  // Add primary contact info first
+
   if (primaryContact.email) emails.add(primaryContact.email);
   if (primaryContact.phoneNumber) phoneNumbers.add(primaryContact.phoneNumber);
   
-  // Add secondary contacts info
+
   finalLinked
     .filter(c => c.id !== primaryContact.id)
     .forEach(c => {

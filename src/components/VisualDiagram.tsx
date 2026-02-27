@@ -9,7 +9,7 @@ export function VisualDiagram({ contacts }: VisualDiagramProps) {
     return null;
   }
 
-  // Group contacts by their primary
+  
   const primaryContacts = contacts.filter(c => c.linkPrecedence === 'primary');
   
   const getSecondaries = (primaryId: number) => {
@@ -35,7 +35,7 @@ export function VisualDiagram({ contacts }: VisualDiagramProps) {
             
             return (
               <div key={primary.id} className="relative">
-                {/* Primary Contact Node */}
+                
                 <div className="flex items-start gap-4">
                   <div className="relative">
                     <div className="bg-gradient-to-br from-green-400 to-emerald-500 dark:from-green-500 dark:to-emerald-600 rounded-xl p-4 text-white shadow-lg min-w-[200px]">
@@ -57,23 +57,23 @@ export function VisualDiagram({ contacts }: VisualDiagramProps) {
                       </div>
                     </div>
                     
-                    {/* Connection line */}
+                    
                     {secondaries.length > 0 && (
                       <div className="absolute left-1/2 top-full h-4 w-0.5 bg-gray-300 dark:bg-gray-600" />
                     )}
                   </div>
                 </div>
                 
-                {/* Secondary Contacts */}
+                
                 {secondaries.length > 0 && (
                   <div className="ml-8 mt-4 relative">
-                    {/* Horizontal connector line */}
+                    
                     <div className="absolute top-0 left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-700" style={{ width: `${Math.min(secondaries.length * 220, 800)}px` }} />
                     
                     <div className="flex flex-wrap gap-4 pt-4">
                       {secondaries.map((secondary) => (
                         <div key={secondary.id} className="relative">
-                          {/* Vertical connector */}
+                          
                           <div className="absolute left-1/2 -top-4 h-4 w-0.5 bg-gray-300 dark:bg-gray-600" />
                           
                           <div className="bg-gradient-to-br from-orange-300 to-amber-400 dark:from-orange-400 dark:to-amber-500 rounded-xl p-4 text-white shadow-md min-w-[180px]">
@@ -104,7 +104,7 @@ export function VisualDiagram({ contacts }: VisualDiagramProps) {
           })}
         </div>
         
-        {/* Legend */}
+        
         <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
           <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-3 uppercase tracking-wide">Legend</p>
           <div className="flex flex-wrap gap-4">

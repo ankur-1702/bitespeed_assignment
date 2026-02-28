@@ -1,4 +1,5 @@
-# Bitespeed Identity Reconciliation [Service](https://identityreconcilation-013de4.netlify.app/)
+# Bitespeed Identity Reconciliation Service
+(https://identityreconcilation-013de4.netlify.app/)
 
 A customer identity linking service built for FluxKart.com to track and consolidate customer contact information across multiple purchases.
 
